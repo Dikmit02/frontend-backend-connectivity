@@ -109,20 +109,20 @@ async function getuserInfo({ access_token }) {
 
 async function loginLocal(req, res, next) {
   const { email, password } = req.body
+  console.log(email,password)
 
   try {
     const savedUser = await User.findOne({ email });
     if (!savedUser) {
-      res.status(400).send({ result: false, data: "email not found" })
+      res.send({ result: false, data: "email not found" })
       return;
     }
     const result = await Bcrypt.compare(password, savedUser.hashPassword);
     if (result) {
       req.user = savedUser;
-      next();
     }
     else {
-      res.status(400).send({ result: false, data: "Wrong  password" })
+      res.send({ result: false, data: "Wrong  password" })
     }
   } catch (e) {
     console.log(e);
@@ -155,14 +155,14 @@ async function SignUpHandler(req, res, next) {
 async function getUser(req, res, next) {
   const { cookies } = req;
   const { jwtToken } = cookies
-  console.log("user ", jwtToken)
+  console.log("158  user ", jwtToken)
   try {
 
     if (jwtToken) {
 
       const data = Jwt.verify(jwtToken, config.JWT_KEY)
       if (data) {
-        console.log('bcjhbf')
+        console.log('165  bcjhbf')
         let fetchUser = await User.findOne(data.userId);
         res.send(fetchUser)
       }

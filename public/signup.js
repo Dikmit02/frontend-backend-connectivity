@@ -20,7 +20,7 @@ window.onload = function () {
                 email: email,
                 name: name,
                 password: password
-            }).then((response) => {
+            },window.location = "/login").then((response) => {
 
                 if (response.data.result === false) {
                     this.alert(response.data.data)
@@ -39,8 +39,7 @@ window.onload = function () {
 
     googleSignUpbtn.addEventListener('click', (e) => {
         e.preventDefault()
-        this.console.log('Clciekdkk')
-        axios.post('/v/google-auth').then((response) => {
+              axios.post('/v/google-auth').then((response) => {
             window.location = response.data
 
         }).catch((e) => {
