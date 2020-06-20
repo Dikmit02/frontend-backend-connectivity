@@ -1,27 +1,17 @@
-// var btn=document.querySelector("#btn")
+window.onload = function () {
+    var btn = document.querySelector("#signupbtn")
+    var loginbtn=document.querySelector('#loginbtn')
 
-// btn.addEventListener('click',()=>{
-//     axios.get('/getAllUser')
-//     .then((response)=>{
-//         console.log(response)
-//     }).catch((e)=>{
-//         console.log(e)
-//     })
-// })
+    btn.addEventListener('click', (e) => {
+        e.preventDefault()
+        window.location = "/signup"
+    })
 
-// var 
-// var username=
 
-window.onload=function(){
-var btn = document.querySelector("#signupbtn")
-btn.addEventListener('click', (e) => {
-    e.preventDefault()
-    window.location = "/signup"
-    
-   
-
-    
-})
+    loginbtn.addEventListener('click',(e)=>{
+        e.preventDefault()
+        window.location='/login'
+    })
 
 
 

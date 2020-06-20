@@ -42,9 +42,7 @@ function getConnectionUrl(auth) {
   });
 }
 
-// function getGooglePlusApi(auth) {
-//   return google.plus({ version: 'v1', auth });
-// }
+
 
 /**********/
 /** MAIN **/
@@ -133,6 +131,11 @@ async function loginLocal(req, res, next) {
 }
 async function SignUpHandler(req, res, next) {
   const { email, password, name } = req.body;
+  let fetchUser = await User.findOne({ email: email });
+  if (fetchUser) {
+    res.send({ result: false, data: 'Already signed up!! Please Login' })
+     return
+  }
 
   const hashPassword = Bcrypt.hashSync(password, parseInt(config.brctyptSalt));
 
@@ -146,53 +149,32 @@ async function SignUpHandler(req, res, next) {
 
 }
 
-// async function getUser(req, res, next) {
-
-//   const { cookies } = req;
-//   console.log(cookies)
-//   const { jwtToken } = cookies
-//   console.log("hjbbcbchj ",jwtToken)
-//   try {
-
-//     if (jwtToken != undefined) {
-//       const data = Jwt.verify(jwtToken, config.JWT_KEY)
-//       let fetchUser = await User.findOne({ data });
-//       console.log(fetchUser)
-//       res.send(data)
-//     } else {
-//       return res.status(400).send({ status: false, data: "user is not logged in" })
-//     }
-
-//   } catch (error) {
-//     return res.status(200).send({ status: false, data: error })
-//   }
-
-// }
 
 
-async function getUser(req,res,next){
-  const { cookies } =req;
-  const { jwtToken } =cookies 
-  console.log("user ",jwtToken)
+
+async function getUser(req, res, next) {
+  const { cookies } = req;
+  const { jwtToken } = cookies
+  console.log("user ", jwtToken)
   try {
 
-   if(jwtToken){
+    if (jwtToken) {
 
-       const data = Jwt.verify(jwtToken,config.JWT_KEY)
-       if(data){
+      const data = Jwt.verify(jwtToken, config.JWT_KEY)
+      if (data) {
         console.log('bcjhbf')
-        let fetchUser = await User.findOne( data.userId );
+        let fetchUser = await User.findOne(data.userId);
         res.send(fetchUser)
-       }
-      
-   }else{
-       return res.status(400).send({status:false,data:"user is not logged in"})
-   }
-      
+      }
+
+    } else {
+      return res.status(400).send({ status: false, data: "user is not logged in" })
+    }
+
   } catch (error) {
-   return res.status(200).send({status:false,data:error})
+    return res.status(200).send({ status: false, data: error })
   }
- 
+
 }
 
 
@@ -205,13 +187,20 @@ async function SignUpGoogle(req, res, next) {
     if (!result) return res.status(400).send({ result: false, data: data })
     const userInfo = await getuserInfo(data)
     if (!userInfo.result) res.status.send({ result: false, data: userInfo.data })
-    // res.status(200).send({ result: true, data: userInfo.data })
     let user = await User.findOne({ email: userInfo.data.email });
-    if (user == undefined) {
+    if (user) {
+      {
+        res.send('<script>alert("Already signed up!! Please Login") </script>  <script> window .location="/login"</script>')
+
+        return;
+      }
+
+
+    } else {
       saveGoogleUser({ email: userInfo.data.email, name: userInfo.data.name, next, req, res })
-      next()
+      // next()
     }
-    
+
 
   } catch (error) {
     res.send({ result: false, data: error })
@@ -241,10 +230,11 @@ async function saveGoogleUser({ email, name, next, req, res }) {
       const newuser = new User({ name, email, source: 'google' });
       fetchUser = await newuser.save();
       req.user = fetchUser;
-      console.log("user ",req.user)
+      // console.log("user ", req.user)
+      next()
     }
     else {
-     
+
       res.redirect('localhost:3000/chat')
     }
 

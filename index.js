@@ -1,16 +1,16 @@
 
 const express = require('express')
 const hbs=require('hbs')
-// const axios=require('axios')
+const cors=require('cors')
 const path=require('path')
 const cookieParser =require( 'cookie-parser')
 require('./db/mongoose')
-const google_util=require('./controllers/auth.controllers')
 const userRouter = require('./src/Router/userRouter')
 
 
 
 const app = express()
+app.use(cors())
 const port = process.env.PORT || 3000
 
 
@@ -30,6 +30,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 app.use(cookieParser())
 
+
 app.get('', (req, res) => {
     res.render('home')
 })
@@ -38,20 +39,19 @@ app.get('/signup',(req, res) => {
     res.render('signup')
 })
 
+app.get('/login',(req,res)=>{
+    res.render('login')
+})
+
 app.use('/v',userRouter)
 
 
-
-
-
-
-// app.get('/myword', async(req, res) => {
-
-//     const code = req.query.code
-//     const {data}=await google_util.getTokenFromCode(code)
-//     const user=await google_util.getuserInfo(data);
-//     console.log(user)
-// })
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+ });
 
 
 

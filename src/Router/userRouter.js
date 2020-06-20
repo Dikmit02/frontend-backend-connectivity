@@ -20,9 +20,10 @@ Router.route('/loginLocal')
 // router.route('/loginGoogle')
 // .get(validator.body(authValidator.loginGoogle),authController.loginGoogle,middleware.assignJWTMiddleware())
 
-Router.route('/google-auth').get((req, res) => {
+Router.route('/google-auth').post((req, res) => {
     const url = authController.urlGoogle()
-    res.redirect(url);
+    // console.log("url  ",url)
+    res.send(url);
 
 })
 
