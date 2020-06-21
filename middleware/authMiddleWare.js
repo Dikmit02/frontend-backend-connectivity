@@ -5,10 +5,11 @@ function assignJWT(req, res, next) {
 
     const { user } = req
     const jwtToken = JWT.sign({ userId: user._id }, config.JWT_KEY);
-    res.cookie('jwtToken', jwtToken, { httpOnly: true })
+    res.cookie('jwtToken', jwtToken, { httpOnly: false })
 
-    // res.status(200).send({ result: true });
-    res.redirect('/login')
+    // console.log(" 1010 jwtToken",jwtToken)
+     res.redirect('/login')
+
 
 }
 

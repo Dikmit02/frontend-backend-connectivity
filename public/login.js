@@ -14,7 +14,6 @@ window.onload = function () {
         e.preventDefault()
         email = email.value
         password = password.value
-        this.console.log(email, password)
         axios.post('/v/loginLocal', {
             email: email,
             password: password
@@ -27,6 +26,11 @@ window.onload = function () {
                 else if ((response.data.data === `Wrong  password`)) {
                     window.location = "/login"
                 }
+            }
+            else{
+                this.console.log("13 ",response.data.data)
+                var cookie=this.document.cookie
+                this.console.log('cokiee   ',cookie)
             }
           
         }).catch((e) => {

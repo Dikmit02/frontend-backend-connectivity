@@ -120,6 +120,9 @@ async function loginLocal(req, res, next) {
     const result = await Bcrypt.compare(password, savedUser.hashPassword);
     if (result) {
       req.user = savedUser;
+      // const data = Jwt.verify(jwtToken, config.JWT_KEY)
+      // console.log(" 124 Data : ",req.cookies.jwtToken)
+      res.send({ result: true, data: req.user })
     }
     else {
       res.send({ result: false, data: "Wrong  password" })
