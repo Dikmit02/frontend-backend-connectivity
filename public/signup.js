@@ -1,7 +1,6 @@
 window.onload = function () {
 
     var signUpbtn = document.querySelector('#signup-btn')
-    var googleSignUpbtn = document.querySelector('#google-signup-btn')
     var name = document.querySelector("#username")
     var email = this.document.querySelector("#email")
     var password = this.document.querySelector("#password")
@@ -20,7 +19,7 @@ window.onload = function () {
                 email: email,
                 name: name,
                 password: password
-            },window.location = "/login").then((response) => {
+            }, window.location = "/login").then((response) => {
 
                 if (response.data.result === false) {
                     this.alert(response.data.data)
@@ -37,14 +36,5 @@ window.onload = function () {
 
     })
 
-    googleSignUpbtn.addEventListener('click', (e) => {
-        e.preventDefault()
-              axios.post('/v/google-auth').then((response) => {
-            window.location = response.data
-
-        }).catch((e) => {
-            console.log("Error ", e)
-        })
-    })
 
 }

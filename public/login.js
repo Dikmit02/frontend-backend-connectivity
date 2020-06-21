@@ -8,7 +8,12 @@ window.onload = function () {
 
     googleLoginBtn.addEventListener('click', (e) => {
         e.preventDefault()
+        axios.post('/v/google-auth').then((response) => {
+            window.location = response.data
 
+        }).catch((e) => {
+            console.log("Error ", e)
+        })
     })
     loginbtn.addEventListener('click', (e) => {
         e.preventDefault()
@@ -27,12 +32,13 @@ window.onload = function () {
                     window.location = "/login"
                 }
             }
-            else{
-                this.console.log("13 ",response.data.data)
-                var cookie=this.document.cookie
-                this.console.log('cokiee   ',cookie)
+            else {
+                this.console.log("13 ", response.data.data)
+                var cookie = this.document.cookie
+                this.console.log('cokiee   ', cookie)
+                window.location="/home"
             }
-          
+
         }).catch((e) => {
 
         })

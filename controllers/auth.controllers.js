@@ -109,7 +109,7 @@ async function getuserInfo({ access_token }) {
 
 async function loginLocal(req, res, next) {
   const { email, password } = req.body
-  console.log(email,password)
+  console.log(email, password)
 
   try {
     const savedUser = await User.findOne({ email });
@@ -120,8 +120,6 @@ async function loginLocal(req, res, next) {
     const result = await Bcrypt.compare(password, savedUser.hashPassword);
     if (result) {
       req.user = savedUser;
-      // const data = Jwt.verify(jwtToken, config.JWT_KEY)
-      // console.log(" 124 Data : ",req.cookies.jwtToken)
       res.send({ result: true, data: req.user })
     }
     else {
@@ -137,7 +135,7 @@ async function SignUpHandler(req, res, next) {
   let fetchUser = await User.findOne({ email: email });
   if (fetchUser) {
     res.send({ result: false, data: 'Already signed up!! Please Login' })
-     return
+    return
   }
 
   const hashPassword = Bcrypt.hashSync(password, parseInt(config.brctyptSalt));
@@ -181,7 +179,7 @@ async function getUser(req, res, next) {
 }
 
 
-async function SignUpGoogle(req, res, next) {
+async function SignInGoogle(req, res, next) {
   try {
 
     const code = req.query.code;
@@ -191,38 +189,17 @@ async function SignUpGoogle(req, res, next) {
     const userInfo = await getuserInfo(data)
     if (!userInfo.result) res.status.send({ result: false, data: userInfo.data })
     let user = await User.findOne({ email: userInfo.data.email });
-    if (user) {
-      {
-        res.send('<script>alert("Already signed up!! Please Login") </script>  <script> window .location="/login"</script>')
-
-        return;
-      }
-
-
-    } else {
+    if (!user) {
       saveGoogleUser({ email: userInfo.data.email, name: userInfo.data.name, next, req, res })
-      // next()
     }
-
-
+    // res.send('<script>alert("Sign in successful") </script>  <script> window .location="/home"</script>')
   } catch (error) {
     res.send({ result: false, data: error })
   }
 }
 
 async function LoginGoogle(req, res, next) {
-  //  console.log("jcnkjnkjcnk  ",req.body)
 
-  // try {
-  //   const ans=getUser()
-  //   console.log("ANS ",ans)
-  //   // else{
-  res.redirect(`localhost:${config.PORT}/v/google-auth`)
-  //   // }
-
-  // } catch (error) {
-  //   res.send({ result: false, data: error })
-  // }
 }
 
 async function saveGoogleUser({ email, name, next, req, res }) {
@@ -253,7 +230,7 @@ module.exports = {
   SignUpHandler,
   loginLocal,
   getUser,
-  SignUpGoogle,
+  SignInGoogle,
   LoginGoogle
 
 }
